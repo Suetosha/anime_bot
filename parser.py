@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+from db_connection import add_to_db
 
 
 def get_resent_anime(year, season):
@@ -23,8 +24,14 @@ def get_resent_anime(year, season):
     return current_anime
 
 
+animes = get_resent_anime(2023, 'fall')
 
-get_resent_anime(2023, 'fall')
+for anime in animes:
+    request = f"""INSERT INTO anime (title)
+                 VALUES ('{anime}');"""
+
+    add_to_db(request)
+
 
 def get_new_updates():
     url = 'https://animego.org/'
