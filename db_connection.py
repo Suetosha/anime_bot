@@ -53,7 +53,7 @@ def get_from_db(request):
         return result
 
     except Exception as err:
-        pass
+        print(err)
 
     finally:
         if connection:
