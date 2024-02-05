@@ -10,7 +10,7 @@ from keyboards.add_anime_kb import create_anime_kb, create_dub_kb
 from keyboards.anime_list import edit_anime_kb
 from services.services import get_anime_list
 from constants.callback_data import CANCEL
-from constants import requests
+from constants import queries
 from lexicon.lexicon import LEXICON
 
 router = Router()
@@ -18,7 +18,7 @@ router = Router()
 
 @router.message(Command(commands='anime_list'))
 async def process_list_of_anime(message: Message):
-    request = requests.get_from_subscription(message.from_user.id)
+    request = queries.get_subscriptions_for_user(message.from_user.id)
     data = get_from_db(request)
     await message.answer(LEXICON['list_edit'], reply_markup=edit_anime_kb(data))
 
@@ -26,10 +26,10 @@ async def process_list_of_anime(message: Message):
 @router.callback_query(DeleteCallbackFactory.filter())
 async def process_edit_anime_list(callback: CallbackQuery, callback_data: DeleteCallbackFactory):
     user_id = callback.from_user.id
-    request = requests.delete_from_subscription(user_id, callback_data.dub_id, callback_data.anime_id)
+    request = queries.delete_from_subscription(user_id, callback_data.dub_id, callback_data.anime_id)
 
     add_to_db(request)
-    request = requests.get_from_subscription(user_id)
+    request = queries.get_subscriptions_for_user(user_id)
     data = get_from_db(request)
 
     await callback.message.edit_text(LEXICON['list_edit'], reply_markup=edit_anime_kb(data))
@@ -49,7 +49,7 @@ async def process_help_command(message: Message, state: FSMContext):
 @router.message(StateFilter(FSMFillForm.fill_anime))
 async def process_other_command(message: Message, state: FSMContext):
     anime_title = message.text.lower()
-    query = requests.get_from_table('anime')
+    query = queries.get_from_table('anime')
     anime_list = get_anime_list(query, anime_title)
 
     if anime_list:
@@ -72,12 +72,14 @@ async def process_add_dubbing(callback: CallbackQuery, callback_data: AddDubCall
     await state.update_data(dub_id=callback_data.id)
     data = await state.get_data()
     await state.clear()
-    request = requests.add_to_subscription(data['user_id'], data['dub_id'], data['anime_id'])
+    query = queries.get_copy_subscription(data['user_id'], data['dub_id'], data['anime_id'])
 
-    if not requests.get_copy_subscription(data['user_id'], data['dub_id'], data['anime_id']):
+    if not get_from_db(query):
+        request = queries.add_to_subscription(data['user_id'], data['dub_id'], data['anime_id'])
         add_to_db(request)
         await callback.message.edit_text(LEXICON['title_added'])
     else:
-        await callback.message.edit_text('Вы уже добавляли такое аниме')
+        await callback.message.edit_text(LEXICON['title_exist'])
         await state.set_state(FSMFillForm.fill_anime)
+
 

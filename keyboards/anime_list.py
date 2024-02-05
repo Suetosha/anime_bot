@@ -4,7 +4,6 @@ from utils.callback_factories import DeleteCallbackFactory
 
 
 def edit_anime_kb(anime_list):
-    print(anime_list)
     edit_anime_buttons = [[InlineKeyboardButton(text=f"{'❌'} {row['title']} - {row['studio']}",
                                                 callback_data=DeleteCallbackFactory(anime_id=row['anime_id'],
                                                                                     dub_id=row['dubbing_id']).pack())]

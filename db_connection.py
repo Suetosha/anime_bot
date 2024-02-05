@@ -59,3 +59,5 @@ def get_from_db(request):
         if connection:
             connection.close()
 
+
+
