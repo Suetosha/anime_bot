@@ -1,6 +1,6 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from utils.callback_factories import AddAnimeCallbackFactory, AddDubCallbackFactory
-
+from db_connection import get_from_db
 
 def create_anime_kb(animes):
     anime_buttons = [[InlineKeyboardButton(text=f'{title}',
@@ -11,8 +11,8 @@ def create_anime_kb(animes):
 
 
 def create_dub_kb():
-    dub = {'Студийная банда': '11', 'AniLibria': '12', 'AnimeVost': '13', 'AniDUB': '14', 'Dream Cast': '15'}
-    dub_buttons = [[InlineKeyboardButton(text=title,
-                                         callback_data=AddDubCallbackFactory(id=id).pack())] for title, id in dub.items()]
+    dub = get_from_db("""SELECT dubbing_id, studio FROM dubbing""")
+
+    dub_buttons = [[InlineKeyboardButton(text=d['studio'], callback_data=AddDubCallbackFactory(id=d['dubbing_id']).pack())] for d in dub]
     keyboard = InlineKeyboardMarkup(inline_keyboard=dub_buttons)
     return keyboard
