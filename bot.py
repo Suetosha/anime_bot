@@ -7,15 +7,13 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from parser import send_updates, get_new_anime, clean_up_table
 from datetime import datetime, date
-from aiogram.client.session.aiohttp import AiohttpSession
 
 
 async def main() -> None:
     config: Config = load_config()
 
     storage = MemoryStorage()
-    session = AiohttpSession(proxy='http://proxy.server:3128')
-    bot = Bot(token=config.tg_bot.token, session=session)
+    bot = Bot(token=config.tg_bot.token)
     dp = Dispatcher(storage=storage)
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
     # планировщик по отправке апдейтов
