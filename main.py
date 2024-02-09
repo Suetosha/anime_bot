@@ -50,7 +50,10 @@ async def unhandled():
     # res1 = requests.get('https://google.com')
     # print('g', res1.status_code)
     with requests.Session() as s:
-        res1 = s.get('https://animego.org')
+        res1 = s.get('https://animego.org', headers={
+            "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36",
+            "x-requested-with": "XMLHttpRequest",
+        })
         print('a', res1.status_code)
 
     # with urlopen('https://animego.org') as r:
