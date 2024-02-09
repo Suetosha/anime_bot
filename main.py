@@ -49,18 +49,18 @@ async def bot_webhook(update: dict):
 async def unhandled():
     # res1 = requests.get('https://google.com')
     # print('g', res1.status_code)
-    # with requests.Session() as s:
-    #     res1 = s.get('https://animego.org')
-    #     print('a', res1.status_code)
+    with requests.Session() as s:
+        res1 = s.get('https://animego.org')
+        print('a', res1.status_code)
 
-    with urlopen('https://animego.org') as r:
-        res2 = r.read()
-        print(res2)
+    # with urlopen('https://animego.org') as r:
+    #     res2 = r.read()
+    #     print(res2)
 
     # r = urlopen('https://animego.org')
     # res2 = r.read()
     # return res1, res2
-    return res2
+    return res1
 
 
 @app.on_event('shutdown')
