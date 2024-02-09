@@ -9,8 +9,8 @@ env = Env()
 env.read_env()
 
 WEBHOOK_PATH = f'/{env("BOT_TOKEN")}/'
-WEBHOOK_URL = 'https://anime-bot-8yh3.onrender.com' + WEBHOOK_PATH
-# WEBHOOK_URL = 'https://a21e-87-116-163-213.ngrok-free.app' + WEBHOOK_PATH
+# WEBHOOK_URL = 'https://anime-bot-8yh3.onrender.com' + WEBHOOK_PATH
+WEBHOOK_URL = 'https://a21e-87-116-163-213.ngrok-free.app' + WEBHOOK_PATH
 
 app = FastAPI()
 bot = Bot(token=env('BOT_TOKEN'))
@@ -27,7 +27,7 @@ async def on_startup():
 
 @dp.message(Command('get'))
 async def get(message):
-    res = requests.get('https://animego.org')
+    res = requests.get('https://google.com')
     await message.answer(str(res.status_code))
 
 
