@@ -33,3 +33,6 @@ async def process_help_command(message: Message):
     await message.answer(str(res.status_code))
 
 
+@router.message()
+async def wtf(message):
+    await message.answer('not found')
