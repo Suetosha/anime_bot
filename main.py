@@ -46,7 +46,13 @@ async def bot_webhook(update: dict):
 
 @app.get('/')
 async def unhandled():
-    return 'huinya'
+    res1 = requests.get('https://google.com')
+    print('g', res1.status_code)
+
+    res2 = requests.get('https://animego.org')
+    print('a', res2.status_code)
+
+    return res1.status_code, res2.status_code
 
 
 @app.on_event('shutdown')
