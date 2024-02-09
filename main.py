@@ -11,10 +11,14 @@ app = FastAPI()
 
 @app.on_event('startup')
 async def on_startup():
+    print('starting')
     tg_bot_webhook = await bot.get_webhook_info()
+    print(tg_bot_webhook.url, WEBHOOK_URL)
 
     if tg_bot_webhook != WEBHOOK_URL:
         await bot.set_webhook(url=WEBHOOK_URL)
+        tg_bot_webhook = await bot.get_webhook_info()
+        print(tg_bot_webhook)
 
 
 @app.post(WEBHOOK_PATH)
