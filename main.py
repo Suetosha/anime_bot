@@ -2,7 +2,6 @@ from fastapi import FastAPI
 # from aiogram import Bot, Dispatcher, types
 from aiogram import types
 from environs import Env
-from aiogram.filters import CommandStart
 from bot import bot, dp
 
 env = Env()
@@ -23,12 +22,6 @@ async def on_startup():
 
     if tg_bot_webhook != WEBHOOK_URL:
         await bot.set_webhook(url=WEBHOOK_URL)
-
-
-@dp.message(CommandStart())
-async def start(message):
-    print(message)
-    await message.answer('Hi')
 
 
 @app.post(WEBHOOK_PATH)
