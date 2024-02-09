@@ -1,8 +1,9 @@
+import requests
 from fastapi import FastAPI
-# from aiogram import Bot, Dispatcher, types
-from aiogram import types
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters import Command
 from environs import Env
-from bot import bot, dp
+# from bot import bot, dp
 
 env = Env()
 env.read_env()
@@ -12,8 +13,8 @@ WEBHOOK_URL = 'https://anime-bot-8yh3.onrender.com' + WEBHOOK_PATH
 # WEBHOOK_URL = 'https://a21e-87-116-163-213.ngrok-free.app' + WEBHOOK_PATH
 
 app = FastAPI()
-# bot = Bot(token=env('BOT_TOKEN'))
-# dp = Dispatcher()
+bot = Bot(token=env('BOT_TOKEN'))
+dp = Dispatcher()
 
 
 @app.on_event('startup')
@@ -22,6 +23,17 @@ async def on_startup():
 
     if tg_bot_webhook != WEBHOOK_URL:
         await bot.set_webhook(url=WEBHOOK_URL)
+
+
+@dp.message(Command('get'))
+async def get(message):
+    res = requests.get('https://animego.org')
+    await message.answer(str(res.status_code))
+
+
+@dp.message()
+async def wtf(message):
+    await message.answer('not found')
 
 
 @app.post(WEBHOOK_PATH)
