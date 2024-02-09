@@ -1,12 +1,20 @@
 from fastapi import FastAPI
-from bot import bot, dp, config
+from aiogram import Bot, Dispatcher, types
 from aiogram import types
+from environs import Env
+from aiogram.filters import CommandStart
 
 
-WEBHOOK_PATH = f'/{config.tg_bot.token}/'
+env = Env()
+env.read_env()
+
+
+WEBHOOK_PATH = f'//'
 WEBHOOK_URL = 'https://anime-bot-8yh3.onrender.com' + WEBHOOK_PATH
 
 app = FastAPI()
+bot = Bot(token=env('BOT_TOKEN'))
+dp = Dispatcher()
 
 
 @app.on_event('startup')
@@ -21,10 +29,16 @@ async def on_startup():
         print(tg_bot_webhook)
 
 
+@dp.message(CommandStart())
+async def start(message):
+    print(message)
+    await message.answer('Hi')
+
+
 @app.post(WEBHOOK_PATH)
 async def bot_webhook(update: dict):
     tg_update = types.Update(**update)
-    await dp._process_update(bot=bot, update=tg_update)
+    await dp.feed_update(bot=bot, update=tg_update)
     return 200
 
 
