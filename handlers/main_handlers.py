@@ -26,13 +26,3 @@ async def process_start_command(message: Message):
 async def process_help_command(message: Message):
     await message.answer(LEXICON['help'])
 
-
-@router.message(Command(commands='get'), StateFilter(default_state))
-async def process_help_command(message: Message):
-    res = requests.get('https://animego.org')
-    await message.answer(str(res.status_code))
-
-
-@router.message()
-async def wtf(message):
-    await message.answer('not found')

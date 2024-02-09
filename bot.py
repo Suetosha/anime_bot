@@ -1,8 +1,9 @@
 # import asyncio
+import requests
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
 # from keyboards.main_keyboard import set_main_menu
-from handlers import commands_handlers, main_handlers
+# from handlers import commands_handlers, main_handlers
 from aiogram.fsm.storage.memory import MemoryStorage
 # from apscheduler.schedulers.asyncio import AsyncIOScheduler
 # from parser import send_updates, get_new_anime, clean_up_table
@@ -32,7 +33,18 @@ dp = Dispatcher(storage=storage)
 
 # set_main_menu(bot)
 
-dp.include_router(main_handlers.router)
+
+@dp.message('get')
+async def get(message):
+    res = requests.get('https://animego.org')
+    await message.answer(str(res.status_code))
+
+
+@dp.message()
+async def wtf(message):
+    await message.answer('not found')
+
+# dp.include_router(main_handlers.router)
 # dp.include_router(commands_handlers.router)
 
 # dp.startup.register(set_main_menu)
