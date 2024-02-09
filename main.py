@@ -1,32 +1,28 @@
 from fastapi import FastAPI
-from aiogram import Bot, Dispatcher, types
+# from aiogram import Bot, Dispatcher, types
 from aiogram import types
 from environs import Env
 from aiogram.filters import CommandStart
-
+from bot import bot, dp
 
 env = Env()
 env.read_env()
 
-
-WEBHOOK_PATH = f'//'
+WEBHOOK_PATH = f'/{env("BOT_TOKEN")}/'
 WEBHOOK_URL = 'https://anime-bot-8yh3.onrender.com' + WEBHOOK_PATH
+# WEBHOOK_URL = 'https://a21e-87-116-163-213.ngrok-free.app' + WEBHOOK_PATH
 
 app = FastAPI()
-bot = Bot(token=env('BOT_TOKEN'))
-dp = Dispatcher()
+# bot = Bot(token=env('BOT_TOKEN'))
+# dp = Dispatcher()
 
 
 @app.on_event('startup')
 async def on_startup():
-    print('starting')
     tg_bot_webhook = await bot.get_webhook_info()
-    print(tg_bot_webhook.url, WEBHOOK_URL)
 
     if tg_bot_webhook != WEBHOOK_URL:
         await bot.set_webhook(url=WEBHOOK_URL)
-        tg_bot_webhook = await bot.get_webhook_info()
-        print(tg_bot_webhook)
 
 
 @dp.message(CommandStart())

@@ -1,4 +1,4 @@
-import asyncio
+# import asyncio
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
 # from keyboards.main_keyboard import set_main_menu
@@ -33,7 +33,7 @@ dp = Dispatcher(storage=storage)
 # set_main_menu(bot)
 
 dp.include_router(main_handlers.router)
-dp.include_router(commands_handlers.router)
+# dp.include_router(commands_handlers.router)
 
 # dp.startup.register(set_main_menu)
 
