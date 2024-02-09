@@ -1,6 +1,7 @@
 # import asyncio
 import requests
 from aiogram import Bot, Dispatcher
+from aiogram.filters import Command
 from config_data.config import Config, load_config
 # from keyboards.main_keyboard import set_main_menu
 # from handlers import commands_handlers, main_handlers
@@ -34,7 +35,7 @@ dp = Dispatcher(storage=storage)
 # set_main_menu(bot)
 
 
-@dp.message('get')
+@dp.message(Command('get'))
 async def get(message):
     res = requests.get('https://animego.org')
     await message.answer(str(res.status_code))
