@@ -1,4 +1,5 @@
 import requests
+from urllib.request import urlopen
 from fastapi import FastAPI
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
@@ -46,13 +47,16 @@ async def bot_webhook(update: dict):
 
 @app.get('/')
 async def unhandled():
-    res1 = requests.get('https://google.com')
-    print('g', res1.status_code)
+    # res1 = requests.get('https://google.com')
+    # print('g', res1.status_code)
+    with requests.Session() as s:
+        res1 = s.get('https://animego.org')
+        print('a', res1.status_code)
 
-    res2 = requests.get('https://animego.org')
-    print('a', res2.status_code)
+    res2 = urlopen('https://animego.org').read()
+    print(res2)
 
-    return res1.status_code, res2.status_code
+    return res1, res2
 
 
 @app.on_event('shutdown')
