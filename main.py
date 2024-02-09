@@ -4,7 +4,7 @@ from aiogram import types
 
 
 WEBHOOK_PATH = f'/{config.tg_bot.token}/'
-WEBHOOK_URL = 'https://5919-87-116-163-213.ngrok-free.app' + WEBHOOK_PATH
+WEBHOOK_URL = 'https://anime-bot-8yh3.onrender.com' + WEBHOOK_PATH
 
 app = FastAPI()
 
