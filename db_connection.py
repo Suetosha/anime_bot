@@ -9,7 +9,7 @@ env.read_env()
 def connect():
     connection = psycopg2.connect(
         host=env('HOST'),
-        user=env('USER'),
+        user=env('DBUSER'),
         password=env('PASSWORD'),
         dbname=env('DBNAME'),
         port=env('PORT')
