@@ -91,7 +91,7 @@ async def send_updates(bot: Bot):
     for user in users:
         updates = []
 
-        sent_updates = get_from_db(queries.get_mails(user['user_id']))
+        sent_mails = get_from_db(queries.get_mails(user['user_id']))
         user_subscriptions = get_from_db(queries.get_subscriptions_for_user(user['user_id']))
 
         for user_subscription in user_subscriptions:
@@ -100,10 +100,10 @@ async def send_updates(bot: Bot):
                         and user_subscription['studio'] == anime_update['studio']:
                     updates.append(anime_update)
 
-        def filter_updates(update):
-            return update not in sent_updates
-
-        updates = list(filter(filter_updates, updates))
+        if sent_mails:
+            def filter_updates(update):
+                return update not in sent_mails
+            updates = list(filter(filter_updates, updates))
 
         if updates:
 
