@@ -106,7 +106,6 @@ async def send_updates(bot: Bot):
             updates = list(filter(filter_updates, updates))
 
         if updates:
-
             for update in updates:
                 add_to_db(queries.insert_into_mail(user['user_id'], update))
 

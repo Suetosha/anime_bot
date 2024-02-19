@@ -55,7 +55,7 @@ def insert_into_mail(user_id, mail):
 
 
 def get_mails(user_id):
-    f"""SELECT title, episode, studio FROM mail
+    return f"""SELECT title, episode, studio FROM mail
         WHERE user_id = {user_id}
      """
 
