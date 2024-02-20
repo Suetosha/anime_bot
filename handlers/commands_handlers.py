@@ -17,7 +17,8 @@ router = Router()
 
 
 @router.message(Command(commands='anime_list'))
-async def process_list_of_anime(message: Message):
+async def process_list_of_anime(message: Message, state: FSMContext):
+    await state.clear()
     request = queries.get_subscriptions_for_user(message.from_user.id)
     data = get_from_db(request)
     await message.answer(LEXICON['list_edit'], reply_markup=edit_anime_kb(data))
@@ -47,7 +48,7 @@ async def process_help_command(message: Message, state: FSMContext):
 
 
 @router.message(StateFilter(FSMFillForm.fill_anime))
-async def process_other_command(message: Message, state: FSMContext):
+async def process_fill_command(message: Message, state: FSMContext):
     anime_title = message.text.lower()
     query = queries.get_from_table('anime')
     anime_list = get_anime_list(query, anime_title)
@@ -82,4 +83,8 @@ async def process_add_dubbing(callback: CallbackQuery, callback_data: AddDubCall
         await callback.message.edit_text(LEXICON['title_exist'])
         await state.set_state(FSMFillForm.fill_anime)
 
+
+@router.message()
+async def process_other_command(message: Message):
+    await message.answer(LEXICON['help'])
 
