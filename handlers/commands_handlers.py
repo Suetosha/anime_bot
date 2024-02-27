@@ -1,17 +1,18 @@
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
-from utils.callback_factories import AddAnimeCallbackFactory, AddDubCallbackFactory, DeleteCallbackFactory
+from utils.callback_factories import AddAnimeCallbackFactory, AddDubCallbackFactory, DeleteCallbackFactory, AddAllDubCallbackFactory
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
 from utils.fsm import FSMFillForm
-from db_connection import get_from_db, add_to_db
+from database.db_connection import get_from_db, add_to_db
 from keyboards.add_anime_kb import create_anime_kb, create_dub_kb
 from keyboards.anime_list import edit_anime_kb
-from services.services import get_anime_list
+from services.services import get_anime_list, add_all_dubbing, add_dubbing
 from constants.callback_data import CANCEL
 from constants import queries
 from lexicon.lexicon import LEXICON
+from services.parser import send_updates_now
 
 router = Router()
 
@@ -47,6 +48,17 @@ async def process_help_command(message: Message, state: FSMContext):
     await state.set_state(FSMFillForm.fill_anime)
 
 
+@router.message(Command(commands='get_updates'), StateFilter(default_state))
+async def process_help_command(message: Message):
+    user_id = message.from_user.id
+    updates = send_updates_now(user_id)
+
+    if updates:
+        await message.answer(updates, parse_mode='HTML')
+    else:
+        await message.answer(LEXICON['update_is_empty'])
+
+
 @router.message(StateFilter(FSMFillForm.fill_anime))
 async def process_fill_command(message: Message, state: FSMContext):
     anime_title = message.text.lower()
@@ -73,15 +85,25 @@ async def process_add_dubbing(callback: CallbackQuery, callback_data: AddDubCall
     await state.update_data(dub_id=callback_data.id)
     data = await state.get_data()
     await state.clear()
-    query = queries.get_copy_subscription(data['user_id'], data['dub_id'], data['anime_id'])
+    request = queries.get_copy_subscription(data['user_id'], data['dub_id'], data['anime_id'])
 
-    if not get_from_db(query):
-        request = queries.add_to_subscription(data['user_id'], data['dub_id'], data['anime_id'])
-        add_to_db(request)
+    if not get_from_db(request):
+        add_dubbing(data['user_id'], data['dub_id'], data['anime_id'])
         await callback.message.edit_text(LEXICON['title_added'])
     else:
         await callback.message.edit_text(LEXICON['title_exist'])
-        await state.set_state(FSMFillForm.fill_anime)
+
+
+@router.callback_query(AddAllDubCallbackFactory.filter(), StateFilter(FSMFillForm.fill_dubbing))
+async def process_add_all_dubbing(callback: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    await state.clear()
+    added_dub = add_all_dubbing(data['user_id'], data['anime_id'])
+
+    if added_dub:
+        await callback.message.edit_text(LEXICON['title_added'])
+    else:
+        await callback.message.edit_text(LEXICON['title_exist'])
 
 
 @router.message()

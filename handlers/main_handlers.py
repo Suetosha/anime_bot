@@ -1,8 +1,7 @@
-import requests
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command, CommandStart, StateFilter
-from db_connection import get_from_db, add_to_db
+from database.db_connection import get_from_db, add_to_db
 from lexicon.lexicon import LEXICON
 from aiogram.fsm.state import default_state
 from constants import queries

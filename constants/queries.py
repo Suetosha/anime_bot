@@ -69,3 +69,18 @@ def add_new_anime(anime):
     return f"""INSERT INTO anime (title)
                      VALUES ('{anime}')
             """
+
+
+def get_from_dubbing():
+    return """SELECT dubbing_id, studio FROM dubbing"""
+
+
+def get_id_dubbing():
+    return """SELECT dubbing_id FROM dubbing"""
+
+
+def get_studio_by_id(dub_id):
+    return f"""SELECT studio FROM dubbing WHERE dubbing_id = {dub_id}"""
+
+
+

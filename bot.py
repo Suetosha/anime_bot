@@ -1,20 +1,18 @@
 import asyncio
-import requests
 from aiogram import Bot, Dispatcher
-from aiogram.filters import Command
 from config_data.config import Config, load_config
 from keyboards.main_keyboard import set_main_menu
 from handlers import commands_handlers, main_handlers
 from aiogram.fsm.storage.memory import MemoryStorage
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from parser import send_updates, get_new_anime, clean_up_table
+from services.parser import send_updates, get_new_anime, clean_up_table
 from datetime import datetime, date
 
 
 async def main() -> None:
     config: Config = load_config()
 
-    bot = Bot(token=config.tg_bot.token)
+    bot = Bot(token=config.tg_bot.token, parse_mode="HTML")
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
 
