@@ -21,6 +21,9 @@ LEXICON = {
 
     'title_exist': 'Это аниме уже добавлено',
 
-    'update_is_empty': 'Новых серий нет:('
+    'update_is_empty': 'Новых серий нет:(',
 
+    'backward': '<<',
+
+    'forward': '>>'
     }

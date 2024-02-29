@@ -14,6 +14,12 @@ class AddAllDubCallbackFactory(CallbackData, prefix=ADD_ALL_DUB):
     pass
 
 
+class Pagination(CallbackData, prefix="pag"):
+    action: str
+    page: int
+    total_pages: int
+
+
 class DeleteCallbackFactory(CallbackData, prefix=DELETE):
     anime_id: int
     dub_id: int
