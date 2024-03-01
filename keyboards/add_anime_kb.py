@@ -16,7 +16,8 @@ def create_anime_kb(animes):
 
 def create_dub_kb():
     dub = get_from_db(get_from_dubbing())
-    dub_buttons = [[InlineKeyboardButton(text=d['studio'], callback_data=AddDubCallbackFactory(id=d['dubbing_id']).pack())] for d in dub]
+    dub_buttons = [[InlineKeyboardButton(text=d['studio'], callback_data=AddDubCallbackFactory(id=d['dubbing_id']).pack())]
+                   for d in dub]
     all_dub_buttons = [[InlineKeyboardButton(text='Все озвучки', callback_data=AddAllDubCallbackFactory().pack())]]
     keyboard = InlineKeyboardMarkup(inline_keyboard=dub_buttons + all_dub_buttons)
     return keyboard
@@ -37,7 +38,8 @@ def create_anime_list_kb(page=1):
     anime_page = anime_pages[(page-1)*5:page*5]
 
     anime_buttons = [[InlineKeyboardButton(text=anime['title'],
-                                           callback_data=AddAnimeCallbackFactory(id=anime['anime_id']).pack())] for anime in anime_page]
+                                           callback_data=AddAnimeCallbackFactory(id=anime['anime_id']).pack())]
+                     for anime in anime_page]
 
     pagination_buttons = [
         InlineKeyboardButton(text=LEXICON['backward'], callback_data=Pagination(action=BACKWARD,

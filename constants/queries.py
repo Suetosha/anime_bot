@@ -83,4 +83,12 @@ def get_studio_by_id(dub_id):
     return f"""SELECT studio FROM dubbing WHERE dubbing_id = {dub_id}"""
 
 
+def get_mailing_status(user_id):
+    return f"""SELECT sending_messages FROM users WHERE user_id={user_id}"""
+
+
+def change_mailing_status(user_id, boolean):
+    return f"""UPDATE users 
+               SET sending_messages = {boolean}
+               WHERE user_id={user_id}"""
 

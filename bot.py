@@ -2,10 +2,10 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
 from keyboards.main_keyboard import set_main_menu
-from handlers import commands_handlers, main_handlers
+from handlers import commands_handlers, main_handlers, other_handlers
 from aiogram.fsm.storage.memory import MemoryStorage
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from services.parser import send_updates, get_new_anime, clean_up_table
+from services.mailing import send_updates, get_new_anime, clean_up_table
 from datetime import datetime, date
 
 
@@ -34,6 +34,7 @@ async def main() -> None:
 
     dp.include_router(main_handlers.router)
     dp.include_router(commands_handlers.router)
+    dp.include_router(other_handlers.router)
 
     dp.startup.register(set_main_menu)
 

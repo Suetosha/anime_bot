@@ -25,5 +25,19 @@ LEXICON = {
 
     'backward': '<<',
 
-    'forward': '>>'
+    'forward': '>>',
+
+    'turn_on_mailing': 'Рассылка включена',
+
+    'turn_off_mailing': 'Рассылка отключена'
+
     }
+
+COMMAND_LEXICON = {
+    '/help': 'Помощь',
+    '/add_anime': 'Добавить аниме',
+    '/added_anime_list': 'Посмотреть список добавленных аниме',
+    '/get_updates': 'Получить новые апдейты',
+    '/get_anime_list': 'Добавить аниме из списка',
+    '/mailing': 'Отключить/подключить рассылку'
+}
