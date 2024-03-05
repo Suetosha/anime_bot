@@ -33,20 +33,22 @@ def get_update_list(user_id, anime_updates):
         updates = [f"Вышло: {anime['title']} {anime['episode']} в озвучке {anime['studio']}\n" +
                    f"<a href = \"https://animego.org{anime['url']}\"> Смотреть </a>"
                    for anime in updates]
-        updates = '\n\n'.join(updates)
 
+        updates = '\n\n'.join(updates)
         return updates
 
 
 async def send_updates(bot: Bot):
+    updates = []
     anime_updates = get_new_updates()
     users = get_from_db(get_all_from_users())
 
     for user in users:
         user_id = user['user_id']
         mailing_status = get_from_db(get_mailing_status(user_id))[0]['sending_messages']
-        if mailing_status:
-            updates = get_update_list(user_id, anime_updates)
+        updates = get_update_list(user_id, anime_updates)
+
+        if mailing_status and updates:
             await bot.send_message(user_id, updates)
 
 
